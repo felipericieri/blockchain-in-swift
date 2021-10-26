@@ -1,8 +1,7 @@
 //
-//  File.swift
-//  
+//  BlockchainService.swift
 //
-//  Created by Felipe Ricieri on 22/07/2021.
+//  Created by Felipe Ricieri on 26/10/21.
 //
 
 import Foundation

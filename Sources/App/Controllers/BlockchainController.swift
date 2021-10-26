@@ -1,3 +1,9 @@
+//
+//  BlockchainController.swift
+//
+//  Created by Felipe Ricieri on 26/10/21.
+//
+
 import Vapor
 
 class BlockchainController {
@@ -9,10 +15,6 @@ class BlockchainController {
   }
   
   // MARK: - Routes
-  
-  func greet(req: Request) -> EventLoopFuture<String> {
-    return req.eventLoop.future("Hello world!")
-  }
   
   func blockchain(req: Request) -> EventLoopFuture<Blockchain> {
     return req.eventLoop.future(blockchainService.blockchain)
