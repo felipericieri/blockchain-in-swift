@@ -7,7 +7,8 @@
 import Foundation
 
 extension String {
-    
+  
+  /// Generates SHA1 Hashes
   func sha1Hash() -> String {
     
     let task = Process()
