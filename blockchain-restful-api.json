@@ -1,0 +1,134 @@
+{
+  "info": {
+    "name": "Blockchain Test 🌐",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Blockchain",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/blockchain",
+          "query": null,
+          "protocol": null,
+          "host": [
+            "{{baseUrl}}/blockchain"
+          ],
+          "port": null,
+          "path": null
+        },
+        "description": "",
+        "header": [],
+        "body": null,
+        "auth": null
+      },
+      "protocolProfileBehavior": {
+        "followRedirects": false,
+        "followOriginalHttpMethod": false,
+        "followAuthorizationHeader": false
+      },
+      "response": []
+    },
+    {
+      "name": "Mine",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/mine",
+          "query": null,
+          "protocol": null,
+          "host": [
+            "{{baseUrl}}/mine"
+          ],
+          "port": null,
+          "path": null
+        },
+        "description": "",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "disabled": false,
+            "description": null
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "disabled": false,
+          "raw": "[{\"from\":\"Felipe\",\"to\":\"Satoshi\",\"amount\":10}]"
+        },
+        "auth": null
+      },
+      "protocolProfileBehavior": {
+        "followRedirects": false,
+        "followOriginalHttpMethod": false,
+        "followAuthorizationHeader": false
+      },
+      "response": []
+    },
+    {
+      "name": "Nodes",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/nodes",
+          "query": null,
+          "protocol": null,
+          "host": [
+            "{{baseUrl}}/nodes"
+          ],
+          "port": null,
+          "path": null
+        },
+        "description": "",
+        "header": [],
+        "body": null,
+        "auth": null
+      },
+      "protocolProfileBehavior": {
+        "followRedirects": false,
+        "followOriginalHttpMethod": false,
+        "followAuthorizationHeader": false
+      },
+      "response": []
+    },
+    {
+      "name": "Register Node",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/nodes",
+          "query": null,
+          "protocol": null,
+          "host": [
+            "{{baseUrl}}/nodes"
+          ],
+          "port": null,
+          "path": null
+        },
+        "description": "",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "disabled": false,
+            "description": null
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "disabled": false,
+          "raw": "[{\"addr\":\"http://localhost:8080\"},{\"addr\":\"http://localhost:8090\"},{\"addr\":\"http://localhost:8091\"}]"
+        },
+        "auth": null
+      },
+      "protocolProfileBehavior": {
+        "followRedirects": false,
+        "followOriginalHttpMethod": false,
+        "followAuthorizationHeader": false
+      },
+      "response": []
+    }
+  ]
+}
