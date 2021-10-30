@@ -6,6 +6,9 @@
 
 import Vapor
 
+/// The first block hash every minted
+let GENESIS_BLOCK_HASH = 40.zeros
+
 /**
  Element of the Blockchain
  */
@@ -28,11 +31,9 @@ final class Block: Content {
   
   ///
   var key: String {
-    get {
-      let transactionsData = try! JSONEncoder().encode(transactions)
-      let transactionJsonString = String(data: transactionsData, encoding: .utf8)!
-      return String(index) + previousHash + String(nonce) + transactionJsonString
-    }
+    let transactionsData = try! JSONEncoder().encode(transactions)
+    let transactionJsonString = String(data: transactionsData, encoding: .utf8)!
+    return String(index) + previousHash + String(nonce) + transactionJsonString
   }
   
   // MARK: -  Initialiser
@@ -49,6 +50,13 @@ final class Block: Content {
   /// Adds a transaction to this block
   func add(_ transaction: Transaction) {
     transactions.append(transaction)
+  }
+  
+  /// Mines the first block
+  func genesis(hash: String) {
+    self.index = 0
+    self.previousHash = GENESIS_BLOCK_HASH
+    self.hash = hash
   }
   
   /// Mines this block

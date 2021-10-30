@@ -12,12 +12,10 @@ import Vapor
 final class Blockchain: Content {
   
   /// Difficulty to mine a block
-  let difficulty = 2
+  let difficulty = 2.zeros
   
   /// Collection of blocks in this chain
   private(set) var blocks: [Block] = []
-  
-//  private(set) var smartContracts: [SmartContract] = [TransactionTypeSmartContract()]
   
   /// Nodes registered in this chain
   private(set) var nodes = [Node]()
@@ -38,20 +36,9 @@ final class Blockchain: Content {
   
   /// Adds a block to the chain
   func addBlock(_ block: Block) {
-    
     if blocks.isEmpty {
-      block.mine(
-        previousHash: "000000000000000000",
-        hash: generateHash(for: block)
-      )
+      block.genesis(hash: generateHash(for: block))
     }
-    
-    // run the smart contracts
-//    smartContracts.forEach { contract in
-//      block.transactions.forEach { tx in
-//        contract.apply(transaction: tx)
-//      }
-//    }
     
     blocks.append(block)
   }
@@ -77,16 +64,12 @@ final class Blockchain: Content {
     return blocks[blocks.count - 1]
   }
   
-  /// Block hash prefix according to the Blockchain difficulty
-  private var prefix: String {
-    return ([String](repeating: "0", count: difficulty)).joined(separator: "")
-  }
-  
   /// Generate Hash for Block according to the difficulty of this blockchain
   private func generateHash(for block: Block) -> String {
     var hash = block.key.sha1Hash()
     
-    while !hash.hasPrefix(prefix) {
+    // Search for a hash prefix according to the Blockchain difficulty
+    while !hash.hasPrefix(difficulty) {
       block.incrementNonce()
       hash = block.key.sha1Hash()
       print(hash)
