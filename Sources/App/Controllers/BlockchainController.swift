@@ -30,7 +30,7 @@ class BlockchainController {
   /// Mines the next block
   func mine(req: Request) throws -> EventLoopFuture<Block> {
     let txs = try req.content.decode([Transaction].self)
-    let block = blockchainService.nextBlock(txs: txs)
+    let block = try blockchainService.nextBlock(txs: txs)
     return req.eventLoop.future(block)
   }
   

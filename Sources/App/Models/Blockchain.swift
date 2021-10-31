@@ -11,6 +11,10 @@ import Vapor
  */
 final class Blockchain: Content {
   
+  enum Error: Swift.Error {
+    case invalidBlockHash
+  }
+  
   /// Collection of blocks in this chain
   private(set) var blocks: [Block] = []
   
@@ -31,7 +35,11 @@ final class Blockchain: Content {
   // MARK: - Blockchain features
   
   /// Adds a block to the chain
-  func add(_ block: Block) {
+  func add(_ block: Block) throws {
+    guard block.hash != nil else {
+      throw Error.invalidBlockHash
+    }
+    
     blocks.append(block)
   }
   

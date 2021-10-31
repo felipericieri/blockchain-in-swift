@@ -43,9 +43,9 @@ class BlockchainService {
   // MARK: - Service features
   
   /// Mintes the next block
-  func nextBlock(txs: [Transaction]) -> Block {
+  func nextBlock(txs: [Transaction]) throws -> Block {
     let block = miningService.mineBlock(previousBlock: blockchain.latestBlock, transactions: txs)
-    blockchain.add(block)
+    try blockchain.add(block)
     return block
   }
   
