@@ -38,6 +38,7 @@ class BlockchainService {
     genesisBlock.hash = miningService.generateHash(for: genesisBlock)
     
     blockchain = Blockchain(genesisBlock: genesisBlock)
+    print("Blockchain is ready! 🎉")
   }
   
   // MARK: - Service features
@@ -45,7 +46,7 @@ class BlockchainService {
   /// Mintes the next block
   func nextBlock(txs: [Transaction]) throws -> Block {
     let block = miningService.mineBlock(previousBlock: blockchain.latestBlock, transactions: txs)
-    try blockchain.add(block)
+    try blockchain.add(block: block)
     return block
   }
   

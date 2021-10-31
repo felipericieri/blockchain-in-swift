@@ -44,7 +44,7 @@ final class Block: Content {
   // MARK: - Block features
   
   /// Adds a transaction to this block
-  func add(_ transaction: Transaction) {
+  func add(transaction: Transaction) {
     transactions.append(transaction)
   }
   

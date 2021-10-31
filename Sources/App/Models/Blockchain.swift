@@ -35,7 +35,7 @@ final class Blockchain: Content {
   // MARK: - Blockchain features
   
   /// Adds a block to the chain
-  func add(_ block: Block) throws {
+  func add(block: Block) throws {
     guard block.hash != nil else {
       throw Error.invalidBlockHash
     }
