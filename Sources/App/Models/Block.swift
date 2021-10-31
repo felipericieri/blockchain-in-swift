@@ -7,7 +7,7 @@
 import Vapor
 
 /**
- Element of the Blockchain
+ The transactions' cluster
  */
 final class Block: Content {
   

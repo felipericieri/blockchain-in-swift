@@ -7,7 +7,7 @@
 import Vapor
 
 /**
- Blockchain - acts like a Blocks Controller
+ A chain of blocks
  */
 final class Blockchain: Content {
   
@@ -30,15 +30,15 @@ final class Blockchain: Content {
   
   // MARK: - Blockchain features
   
+  /// Adds a block to the chain
+  func add(_ block: Block) {
+    blocks.append(block)
+  }
+  
   /// Registers a node to this chain and returns all nodes registered
   func register(nodes: [Node]) -> [Node] {
     self.nodes.append(contentsOf: nodes)
     return self.nodes
-  }
-  
-  /// Adds a block to the chain
-  func add(_ block: Block) {
-    blocks.append(block)
   }
 }
 

@@ -7,7 +7,7 @@
 import Vapor
 
 /**
- Raw Transaction
+ A fact to be registered
  */
 final class Transaction: Content {
   
