@@ -11,7 +11,7 @@ import Vapor
  */
 class BlockchainController {
   
-  /// BLockchain Service
+  /// Blockchain Service
   private let blockchainService: BlockchainService
   
   // MARK: - Initialiser
@@ -27,7 +27,7 @@ class BlockchainController {
     return req.eventLoop.future(blockchainService.blockchain)
   }
   
-  /// Mints the next block
+  /// Mines the next block
   func mine(req: Request) throws -> EventLoopFuture<Block> {
     let txs = try req.content.decode([Transaction].self)
     let block = blockchainService.nextBlock(txs: txs)

@@ -6,13 +6,22 @@
 
 import Foundation
 
+/// The first block hash every minted
+let GENESIS_BLOCK_HASH = 40.zeros
+
 /**
  Exposes the Blockchain to the Controller
  */
 class BlockchainService {
   
+  /// Difficulty to mine a block
+  let difficulty = 2.zeros
+    
   /// Current blockchain
   let blockchain: Blockchain
+  
+  /// Mining Service
+  private let miningService: MiningService
   
   /// Nodes registered
   var nodes: [Node] {
@@ -22,13 +31,19 @@ class BlockchainService {
   // MARK: - Initialiser
   
   init() {
-    blockchain = Blockchain(genesisBlock: Block())
+    miningService = MiningService(difficulty: difficulty)
+    
+    // Generates Genesis Block
+    let genesisBlock = Block(index: 0, previousHash: GENESIS_BLOCK_HASH)
+    genesisBlock.hash = miningService.generateHash(for: genesisBlock)
+    
+    blockchain = Blockchain(genesisBlock: genesisBlock)
   }
   
   /// Mintes the next block
   func nextBlock(txs: [Transaction]) -> Block {
-    let block = blockchain.getNextBlock(with: txs)
-    blockchain.addBlock(block)
+    let block = miningService.mineBlock(previousBlock: blockchain.latestBlock, transactions: txs)
+    blockchain.add(block)
     return block
   }
   
