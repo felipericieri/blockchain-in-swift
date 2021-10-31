@@ -7,7 +7,7 @@
 import Vapor
 
 /**
- Element of the Blockchain
+ The transactions' cluster
  */
 final class Block: Content {
   
@@ -18,44 +18,34 @@ final class Block: Content {
   private(set) var previousHash: String
   
   /// The block hash. It is `nil` until the block is minted
-  private(set) var hash: String!
+  var hash: String!
   
   /// Random value that
-  private(set) var nonce: UInt
+  private(set) var nonce: UInt = 0
   
   /// Transactions added to the block
   private(set) var transactions: [Transaction]
   
-  ///
+  /// The block flatten in a key, so it can be hashed
   var key: String {
-    get {
-      let transactionsData = try! JSONEncoder().encode(transactions)
-      let transactionJsonString = String(data: transactionsData, encoding: .utf8)!
-      return String(index) + previousHash + String(nonce) + transactionJsonString
-    }
+    let transactionsData = try! JSONEncoder().encode(transactions)
+    let transactionJsonString = String(data: transactionsData, encoding: .utf8)!
+    return String(index) + previousHash + String(nonce) + transactionJsonString
   }
   
   // MARK: -  Initialiser
   
-  init() {
-    index = 0
-    previousHash = ""
-    nonce = 0
-    transactions = []
+  init(index: UInt, previousHash: String) {
+    self.index = index
+    self.previousHash = previousHash
+    self.transactions = []
   }
   
   // MARK: - Block features
   
   /// Adds a transaction to this block
-  func add(_ transaction: Transaction) {
+  func add(transaction: Transaction) {
     transactions.append(transaction)
-  }
-  
-  /// Mines this block
-  func mine(index: UInt = 0, previousHash: String, hash: String) {
-    self.index = index
-    self.previousHash = previousHash
-    self.hash = hash
   }
   
   /// Increments nonce

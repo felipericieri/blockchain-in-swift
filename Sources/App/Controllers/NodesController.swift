@@ -1,17 +1,17 @@
 //
-//  BlockchainController.swift
+//  NodesController.swift
 //
-//  Created by Felipe Ricieri on 26/10/21.
+//  Created by Felipe Ricieri on 31/10/21.
 //
 
 import Vapor
 
 /**
- Blockchain Controller - returns the routes to API
+ Nodes Controller - returns the routes to API
  */
-class BlockchainController {
+class NodesController {
   
-  /// Blockchain Service
+  /// Nodes Service
   private let blockchainService: BlockchainService
   
   // MARK: - Initialiser
@@ -21,18 +21,6 @@ class BlockchainController {
   }
   
   // MARK: - Routes
-  
-  /// Retrieves the blockchain initialised by the node
-  func blockchain(req: Request) -> EventLoopFuture<Blockchain> {
-    return req.eventLoop.future(blockchainService.blockchain)
-  }
-  
-  /// Mines the next block
-  func mine(req: Request) throws -> EventLoopFuture<Block> {
-    let txs = try req.content.decode([Transaction].self)
-    let block = try blockchainService.nextBlock(txs: txs)
-    return req.eventLoop.future(block)
-  }
   
   /// Returns a collection of registered nodes to the blockchain in this node
   func nodes(req: Request) throws -> EventLoopFuture<[Node]> {
