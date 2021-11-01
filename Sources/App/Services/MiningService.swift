@@ -5,6 +5,7 @@
 //
 
 import Foundation
+import CryptoKit
 
 /**
  Service used to Mine blocks
@@ -55,9 +56,28 @@ final class MiningService {
 // MARK: - Helpers
 
 extension String {
-  
+    
   /// Generates SHA1 Hashes
   func toSHA1() -> String {
+    let data = self.data(using: .utf8)!
+    let digest = Insecure.SHA1.hash(data: data)
+    return digest.hexStr
+  }
+}
+
+extension Digest {
+  var bytes: [UInt8] { Array(makeIterator()) }
+  var data: Data { Data(bytes) }
+  
+  var hexStr: String {
+    bytes.map { String(format: "%02X", $0) }.joined()
+  }
+}
+
+extension String {
+  
+  /// Generates SHA1 Hashes (Inneficient)
+  func toSHA1_inneficient() -> String {
     
     let task = Process()
     task.launchPath = "/usr/bin/shasum"
