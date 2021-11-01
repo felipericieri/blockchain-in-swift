@@ -26,7 +26,7 @@ final class MiningService {
   /// Mines a the next block in the blockchain
   func mineBlock(previousBlock: Block, transactions: [Transaction]) -> Block {
     let nextIndex = previousBlock.index + 1
-    print("⛏ Start mining block at height \(nextIndex)...")
+    print("⛏ Starting to mine the block at height \(nextIndex)...")
     let block = Block(index: nextIndex, previousHash: previousBlock.hash)
     transactions.forEach { block.add(transaction: $0) }
     
@@ -38,7 +38,7 @@ final class MiningService {
   
   /// Generate Hash for Block according to the difficulty of this blockchain
   func generateHash(for block: Block) -> String {
-    print("🔑 Finding the hash for block at height \(block.index)...")
+    print("🔑 Searching the hash for block at height \(block.index)...")
     var hash = block.key.toSHA1()
     
     // Search for a hash prefix according to the Blockchain difficulty
@@ -56,7 +56,6 @@ final class MiningService {
 // MARK: - Helpers
 
 extension String {
-    
   /// Generates SHA1 Hashes
   func toSHA1() -> String {
     let data = self.data(using: .utf8)!
