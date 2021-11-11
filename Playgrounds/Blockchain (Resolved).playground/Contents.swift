@@ -1,9 +1,22 @@
 import CryptoKit
 import Foundation
 
+// Transaction
+struct Transaction: Encodable {
+  let sender: String
+  let receiver: String
+  let amount: Double
+  
+  init(sender: String, receiver: String, amount: Double) {
+    self.sender = sender
+    self.receiver = receiver
+    self.amount = amount
+  }
+}
+
 // Block
 final class Block {
-  private(set) var index: UInt
+  private(set) var height: UInt
   private(set) var previousHash: String
   var hash: String!
   private(set) var nonce: UInt = 0
@@ -12,11 +25,11 @@ final class Block {
   var key: String {
     let transactionsData = try! JSONEncoder().encode(transactions)
     let transactionJsonString = String(data: transactionsData, encoding: .utf8)!
-    return String(index) + previousHash + String(nonce) + transactionJsonString
+    return String(height) + previousHash + String(nonce) + transactionJsonString
   }
   
-  init(index: UInt, previousHash: String) {
-    self.index = index
+  init(height: UInt, previousHash: String) {
+    self.height = height
     self.previousHash = previousHash
     self.transactions = []
   }
@@ -32,31 +45,29 @@ final class Block {
 
 // Blockchain
 final class Blockchain {
+  enum Error: Swift.Error {
+    case invalidHash
+  }
+  
   private(set) var blocks: [Block] = []
+  
+  private let difficulty: String
   
   var latestBlock: Block {
     return blocks[blocks.count - 1]
   }
   
-  init(genesisBlock: Block) {
+  init(difficulty: String, genesisBlock: Block) {
+    self.difficulty = difficulty
     blocks.append(genesisBlock)
   }
   
-  func add(block: Block) {
+  func add(block: Block) throws {
+    if !block.hash.hasPrefix(difficulty) {
+      throw Error.invalidHash
+    }
+    
     blocks.append(block)
-  }
-}
-
-// Transaction
-final class Transaction: Encodable {
-  let from: String
-  let to: String
-  let amount: Double
-  
-  init(from: String, to: String, amount: Double) {
-    self.from = from
-    self.to = to
-    self.amount = amount
   }
 }
 
@@ -71,9 +82,9 @@ final class MiningService {
   
   // mine block method
   func mineBlock(previousBlock: Block, transactions: [Transaction]) -> Block {
-    let nextIndex = previousBlock.index + 1
-    print("⛏ Starting to mine the block at height \(nextIndex)...")
-    let block = Block(index: nextIndex, previousHash: previousBlock.hash)
+    let nextHeight = previousBlock.height + 1
+    print("⛏ Starting to mine the block at height \(nextHeight)...")
+    let block = Block(height: nextHeight, previousHash: previousBlock.hash)
     transactions.forEach { block.add(transaction: $0) }
     
     let hash = generateHash(for: block)
@@ -84,9 +95,12 @@ final class MiningService {
   
   // generate hash method
   func generateHash(for block: Block) -> String {
-    print("🔑 Searching the hash for block at height \(block.index)...")
+    print("🔑 Searching the hash for block at height \(block.height)...")
     var hash = block.key.toSHA1()
     
+    // Try your own solution here!
+    
+    // Previous algorithm
     while !hash.hasPrefix(blockchainDifficulty) {
       block.incrementNonce()
       hash = block.key.toSHA1()
@@ -100,6 +114,7 @@ final class MiningService {
 
 // Sha-1
 extension String {
+  /// Generates SHA1 Hashes
   func toSHA1() -> String {
     let data = self.data(using: .utf8)!
     let digest = Insecure.SHA1.hash(data: data)
@@ -116,24 +131,33 @@ extension Digest {
   }
 }
 
-/// Exercise 1
+/// Exercise 3 (Challenge)
 
+// The blockchain difficulty
+let blockchainDifficulty = "00"
 // Creates the Mining Service
-let miningService = MiningService(difficulty: "00") // starting with just 2 zeroes
+let miningService = MiningService(difficulty: blockchainDifficulty)
 // Generates Genesis Block
-let genesisBlock = Block(index: 0, previousHash: "0000000000000000000000000000000000000000") // 40 zeroes
-// Tries to find the hash for the genesis block
+let genesisBlock = Block(height: 0, previousHash: "0000000000000000000000000000000000000000")
 genesisBlock.hash = miningService.generateHash(for: genesisBlock)
 // Once it finds the hash, create the Blockchain
-let blockchain = Blockchain(genesisBlock: genesisBlock)
+let blockchain = Blockchain(difficulty: blockchainDifficulty, genesisBlock: genesisBlock)
 print("Blockchain is ready! 🎉")
 
-/// Exercise 2
+let now = Date()
 
-// Set a transaction
-let transaction = Transaction(from: "Felipe", to: "Tim Cook", amount: 100)
-// Creates a new block
-let newBlock = miningService.mineBlock(previousBlock: genesisBlock, transactions: [transaction])
-// Add to the chain
+// Creates a new Transaction
+let transaction = Transaction(sender: "Felipe", receiver: "Tim Cook", amount: 100)
 
-blockchain.add(block: newBlock)
+do {
+  // Mines a new block for the transaction
+  let newBlock = miningService.mineBlock(previousBlock: genesisBlock, transactions: [transaction])
+  try blockchain.add(block: newBlock)
+
+  let later = Date()
+  let timeSpentMining = now.distance(to: later)
+
+  print("👾 Block took \(timeSpentMining) seconds to mine the block at height \(blockchain.latestBlock.height)")
+} catch {
+  print("🚨 Oh oh! The hash isn't valid. It needs to conform with the blockchain difficulty")
+}

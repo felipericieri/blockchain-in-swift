@@ -34,7 +34,7 @@ class BlockchainService {
     miningService = MiningService(difficulty: difficulty)
     
     // Generates Genesis Block
-    let genesisBlock = Block(index: 0, previousHash: GENESIS_BLOCK_HASH)
+    let genesisBlock = Block(height: 0, previousHash: GENESIS_BLOCK_HASH)
     genesisBlock.hash = miningService.generateHash(for: genesisBlock)
     
     blockchain = Blockchain(genesisBlock: genesisBlock)

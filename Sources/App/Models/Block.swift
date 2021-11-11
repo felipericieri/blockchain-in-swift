@@ -12,7 +12,7 @@ import Vapor
 final class Block: Content {
   
   /// The height the block is in the chain
-  private(set) var index: UInt
+  private(set) var height: UInt
   
   /// Reference to the hash of the previous block
   private(set) var previousHash: String
@@ -30,13 +30,13 @@ final class Block: Content {
   var key: String {
     let transactionsData = try! JSONEncoder().encode(transactions)
     let transactionJsonString = String(data: transactionsData, encoding: .utf8)!
-    return String(index) + previousHash + String(nonce) + transactionJsonString
+    return String(height) + previousHash + String(nonce) + transactionJsonString
   }
   
   // MARK: -  Initialiser
   
-  init(index: UInt, previousHash: String) {
-    self.index = index
+  init(height: UInt, previousHash: String) {
+    self.height = height
     self.previousHash = previousHash
     self.transactions = []
   }

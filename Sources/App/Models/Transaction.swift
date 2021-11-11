@@ -12,19 +12,19 @@ import Vapor
 final class Transaction: Content {
   
   /// Sender Name
-  let from: String
+  let sender: String
   
   /// Receiver Name
-  let to: String
+  let receiver: String
   
   /// Amount of SWIFT
   let amount: Double
 
   // MARK: - Initialiser
   
-  init(from: String, to: String, amount: Double) {
-    self.from = from
-    self.to = to
+  init(sender: String, receiver: String, amount: Double) {
+    self.sender = sender
+    self.receiver = receiver
     self.amount = amount
   }
 }
